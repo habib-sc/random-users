@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.send('Random Users');
 });
 
-app.use("/users", usersRoutes);
+app.use("/user", usersRoutes);
 
 // for unavailable routes 
 app.all("*", (req, res) => {

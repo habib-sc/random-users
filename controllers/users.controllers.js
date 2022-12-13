@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 
+// Getting all users and users by limit controller 
 module.exports.getAllUsers = async (req, res, next) => {
     try {
         // getting limit from query 
@@ -20,6 +21,29 @@ module.exports.getAllUsers = async (req, res, next) => {
         } else {
             res.send(users);
         };
+    } catch (error) {
+        next(error);
+    };
+};
+
+
+// Getting A random user controller 
+module.exports.getRandomUser = async (req, res, next) => {
+    try {
+        // Reading userData.json file 
+        const usersJson = await fs.readFile('./usersData.json');
+        const users = JSON.parse(usersJson);
+
+        // Getting total user count 
+        const totalUsers = users.length;
+        // Getting random index by 0 to total users count 
+        const randomIndex = Math.floor(Math.random() * (totalUsers));
+
+        // Sending response with random user 
+        res.send(users[randomIndex]);
+
+        console.log(randomIndex);
+
     } catch (error) {
         next(error);
     };

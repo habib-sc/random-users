@@ -3,8 +3,11 @@ const usersController = require('../../controllers/users.controllers');
 
 const router = express.Router();
 
-router.route("/")
+router.route('/all')
     .get(usersController.getAllUsers);
+
+router.route('/random')
+    .get(usersController.getRandomUser);
 
 
 
