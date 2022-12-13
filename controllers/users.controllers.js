@@ -99,9 +99,10 @@ module.exports.saveUser = async (req, res, next) => {
 // Patch a user in ranndom user list 
 module.exports.updateUser = async (req, res, next) => {
     const userData = req.body;
+    const idType = typeof userData.id;
 
     // checking user id 
-    if (userData.id) {
+    if (userData.id && idType == "number") {
         // Reading userData.json file 
         const usersJson = await fs.readFile('./usersData.json');
         const users = JSON.parse(usersJson);
@@ -145,7 +146,7 @@ module.exports.updateUser = async (req, res, next) => {
 
 
     } else {
-        res.send({ success: false, message: "User Id Required!" })
+        res.send({ success: false, message: "User id should be required and number." })
     };
 
 };
