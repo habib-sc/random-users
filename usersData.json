@@ -30,21 +30,5 @@
         "contact": "+421 1-245-063-1694 x2551",
         "address": "Dhaka",
         "photoUrl": "https://robohash.org/dolorquiamaiores.png?size=300x300&set=set1"
-    },
-    {
-        "id": 105,
-        "gender": "Male",
-        "name": "Habibur",
-        "contact": "+421 1-245-063-1694 x2551",
-        "address": "Kuril, Dhaka",
-        "photoUrl": "https://robohash.org/dolorquiamaiores.png?size=300x300&set=set1"
-    },
-    {
-        "id": 106,
-        "gender": "Female",
-        "name": "Kajal Agarwal",
-        "contact": "+42245-063-1694 x2551",
-        "address": "Faridpur",
-        "photoUrl": "https://robohash.org/dolorquiamaiores.png?size=300x300&set=set1"
     }
 ]

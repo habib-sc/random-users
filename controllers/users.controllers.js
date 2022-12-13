@@ -150,3 +150,41 @@ module.exports.updateUser = async (req, res, next) => {
     };
 
 };
+
+
+// Deleting a user 
+module.exports.deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.query.id;
+        const idType = typeof Number(userId);
+        // checking user id 
+        if (userId && idType == "number") {
+            // Reading userData.json file 
+            const usersJson = await fs.readFile('./usersData.json');
+            const users = JSON.parse(usersJson);
+
+            // getting user list without requested user id
+            const filteredUsers = users.filter(user => user.id != userId);
+
+            // Stringifing the data 
+            const stringified = JSON.stringify(filteredUsers);
+
+            // updating data in json file by wrinting json file 
+            fs.writeFile('./usersData.json', stringified, 'utf8', (err) => {
+                if (err) {
+                    res.send({ success: false, message: "Failed to write data!" });
+                    return;
+                }
+            });
+
+            // Sending success response 
+            res.send({ success: true, message: "User Deleted !", filteredUsers: filteredUsers });
+
+
+        } else {
+            res.send({ success: false, message: "User id should be number and required in query parameter." })
+        };
+    } catch (error) {
+        next(error)
+    }
+};
