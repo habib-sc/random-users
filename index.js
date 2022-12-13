@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
 
+const usersRoutes = require('./routes/v1/users.route');
+
 // Creating app 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Random Users');
 });
+
+app.use("/users", usersRoutes);
 
 // for unavailable routes 
 app.all("*", (req, res) => {
