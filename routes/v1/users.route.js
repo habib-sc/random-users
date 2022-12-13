@@ -15,6 +15,9 @@ router.route('/save')
 router.route('/update')
     .patch(usersController.updateUser);
 
+router.route('/bulk-update')
+    .patch(usersController.bulkUpdateUsers);
+
 router.route('/delete')
     .delete(usersController.deleteUser);
 

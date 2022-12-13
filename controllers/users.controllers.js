@@ -152,6 +152,66 @@ module.exports.updateUser = async (req, res, next) => {
 };
 
 
+// Bulk update user
+module.exports.bulkUpdateUsers = async (req, res, next) => {
+    const userInfoArray = req.body;
+    let idTypeError;
+
+    // Reading userData.json file 
+    const usersJson = await fs.readFile('./usersData.json');
+    const users = JSON.parse(usersJson);
+
+    // looping the user data array and update user info 
+    for (const userData of userInfoArray) {
+        const idType = typeof userData.id;
+        if (idType == "number") {
+            // getting the user by id
+            const currentUser = users.find(user => user.id === userData.id);
+            // Updating the user info 
+            if (currentUser) {
+                if (userData.gender) {
+                    currentUser.gender = userData.gender;
+                }
+                if (userData.name) {
+                    currentUser.name = userData.name;
+                }
+                if (userData.contact) {
+                    currentUser.contact = userData.contact;
+                }
+                if (userData.address) {
+                    currentUser.address = userData.address;
+                }
+                if (userData.photoUrl) {
+                    currentUser.photoUrl = userData.photoUrl;
+                };
+            }
+        } else {
+            idTypeError = "User id should be required and number.";
+        };
+    };
+
+    // Handling id type error 
+    if (idTypeError) {
+        res.send({ success: false, message: "All Users id should be required and number." });
+        return;
+    }
+
+    // Stringifing the data 
+    const stringified = JSON.stringify(users);
+
+    // updating data in json file by wrinting json file 
+    fs.writeFile('./usersData.json', stringified, 'utf8', (err) => {
+        if (err) {
+            res.send({ success: false, message: "Failed to write data!" });
+            return;
+        }
+    });
+
+    // Sending success response 
+    res.send({ success: true, message: "Bulk Users Updated !" });
+};
+
+
 // Deleting a user 
 module.exports.deleteUser = async (req, res, next) => {
     try {
