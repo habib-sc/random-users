@@ -48,3 +48,50 @@ module.exports.getRandomUser = async (req, res, next) => {
         next(error);
     };
 };
+
+
+// Adding New user in ranndo user list 
+module.exports.saveUser = async (req, res, next) => {
+    const userData = req.body;
+    const { id, gender, name, contact, address, photoUrl } = userData;
+
+    // checking all input data available or not 
+    if (id && gender && name && contact && address && photoUrl) {
+        let updatedUserList = [];
+        // Reading userData.json file 
+        const usersJson = await fs.readFile('./usersData.json');
+        const users = JSON.parse(usersJson);
+
+        // checking already user exist or not 
+        isExist = users.filter(user => user.id === id);
+        if (isExist.length > 0) {
+            res.send({ success: false, message: "User Alrady Exist" });
+            return;
+        }
+
+        // adding data to userlist array with userdata 
+        if (users) {
+            updatedUserList = users;
+            updatedUserList.push(userData);
+        }
+
+        // Stringifing the data 
+        const stringified = JSON.stringify(updatedUserList);
+
+        // adding data in json file by wrinting json file 
+        fs.writeFile('./usersData.json', stringified, 'utf8', (err) => {
+            if (err) {
+                res.send({ success: false, message: "Failed to write data!" });
+                return;
+            }
+        });
+
+        // Sending success response 
+        res.send({ success: true, message: "User Added!" });
+
+
+    } else {
+        res.send({ success: false, message: "All parameters are required - id, gender, name, contact, address, photoUrl" })
+    };
+
+};
