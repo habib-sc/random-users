@@ -12,4 +12,7 @@ router.route('/random')
 router.route('/save')
     .post(usersController.saveUser);
 
+router.route('/update')
+    .patch(usersController.updateUser);
+
 module.exports = router;

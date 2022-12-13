@@ -63,7 +63,7 @@ module.exports.saveUser = async (req, res, next) => {
         const users = JSON.parse(usersJson);
 
         // checking already user exist or not 
-        isExist = users.filter(user => user.id === id);
+        const isExist = users.filter(user => user.id === id);
         if (isExist.length > 0) {
             res.send({ success: false, message: "User Alrady Exist" });
             return;
@@ -92,6 +92,60 @@ module.exports.saveUser = async (req, res, next) => {
 
     } else {
         res.send({ success: false, message: "All parameters are required - id, gender, name, contact, address, photoUrl" })
+    };
+
+};
+
+// Patch a user in ranndom user list 
+module.exports.updateUser = async (req, res, next) => {
+    const userData = req.body;
+
+    // checking user id 
+    if (userData.id) {
+        // Reading userData.json file 
+        const usersJson = await fs.readFile('./usersData.json');
+        const users = JSON.parse(usersJson);
+
+        // getting the user by id
+        const currentUser = users.find(user => user.id === userData.id);
+        // Updating the user info 
+        if (currentUser) {
+            if (userData.gender) {
+                currentUser.gender = userData.gender;
+            } else if (userData.name) {
+                currentUser.name = userData.name;
+            } else if (userData.contact) {
+                currentUser.contact = userData.contact;
+            } else if (userData.address) {
+                currentUser.address = userData.address;
+            } else if (userData.photoUrl) {
+                currentUser.photoUrl = userData.photoUrl;
+            };
+        } else {
+            res.send({ success: false, message: "User Not Found!" });
+            return;
+        }
+
+        // updating user data
+        users.map(user => user.id !== currentUser.id ? user : currentUser);
+
+        // Stringifing the data 
+        const stringified = JSON.stringify(users);
+
+        // updating data in json file by wrinting json file 
+        fs.writeFile('./usersData.json', stringified, 'utf8', (err) => {
+            if (err) {
+                res.send({ success: false, message: "Failed to write data!" });
+                return;
+            }
+        });
+
+        // Sending success response 
+        res.send({ success: true, message: "User Updated !" });
+
+
+    } else {
+        res.send({ success: false, message: "User Id Required!" })
     };
 
 };
